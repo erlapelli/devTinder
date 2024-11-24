@@ -2,41 +2,41 @@ const express = require("express")
 
 const app = express() 
 
-app.use("/user",(req,res) => {
-    res.send("HAHAHA")
-})
+app.use("/user",[(req,res,next)=>{
+    console.log("Handling the route user!!");
+    
+    res.send("Route Handler 1")
+    next()
+    
+},
+(req,res,next)=>{
+    console.log("Handling the route user 2!!");
+    res.send("2nd Response")
+    next()
+},
 
-// This will only handle GET call to /user 
-app.get("/user",(req,res)=>{
-    res.send({firstName:"Akshay", lastName:"Saini"});
-});
+(req,res,next)=>{
+    console.log("Handling the route user 3!!");
+    // res.send("3rd Response")
+    next()
+}, 
 
-app.post("/user",(req,res)=>{
-    console.log("Save Date to the database");
-    res.send("Data successfully saved to the database")
-});
+(req,res,next)=>{
+    console.log("Handling the route user 4!!");
+    // res.send("4th Response")
+    next()
+},
 
-app.delete("/user",(req,res)=>{
-    res.send("Deleted Successfully")
-})
+(req,res,next)=>{
+    console.log("Handling the route user 5!!");
+    // res.send("5th Response")
+    next()
+},
+]);
 
 
-// this will match all the HTTP method API calls to /test
-app.use("/hello",(req,res)=>{
-    res.send("Hello hello")
-})
 
-app.use("/hello/2",(req,res)=>{
-    res.send("poorna hi")
-})
 
-app.use("/test",(req,res)=>{
-    res.send("Hello from the server")
-})
-
-// app.use("/",(req,res)=>{
-//     res.send("Hiii");
-// })
 
 app.listen(7777, () => {
     console.log("Server is listening on port 7777");
