@@ -1,43 +1,38 @@
-const express = require("express")
+const express = require("express");
+const  connectDB  = require("./config/database");
+const app = express();
 
-const app = express() 
 
-app.use("/user",[(req,res,next)=>{
-    console.log("Handling the route user!!");
-    
-    res.send("Route Handler 1")
-    next()
-    
-},
-(req,res,next)=>{
-    console.log("Handling the route user 2!!");
-    res.send("2nd Response")
-    next()
-},
 
-(req,res,next)=>{
-    console.log("Handling the route user 3!!");
-    // res.send("3rd Response")
-    next()
-}, 
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
 
-(req,res,next)=>{
-    console.log("Handling the route user 4!!");
-    // res.send("4th Response")
-    next()
-},
 
-(req,res,next)=>{
-    console.log("Handling the route user 5!!");
-    // res.send("5th Response")
-    next()
-},
-]);
+app.use(express.json());
+app.use(cookieParser());
+
+const authRouter = require("./routes/auth");
+const profileRouter = require("./routes/profile");
+const requestRouter= require("./routes/request");
+const userRouter = require("./routes/user");
+
+app.use("/",authRouter);
+app.use("/",profileRouter);
+app.use("/",requestRouter);
+app.use("/",userRouter);
 
 
 
 
 
-app.listen(7777, () => {
-    console.log("Server is listening on port 7777");
+connectDB()
+.then(()=>{
+    console.log("Database connection established...")
+    app.listen(7777, () => {
+        console.log("Server is listening on port 7777");
+    });
+})
+.catch((err)=>{
+    console.error("Database cannot be connected!!");
 });
+
