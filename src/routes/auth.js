@@ -36,6 +36,7 @@ const authRouter = express.Router()
     
 // });
 
+const environment = process.env.NODE_ENV || "development";
 authRouter.post("/signup", async (req, res) => {
     try {
       // Validation of data
@@ -59,13 +60,18 @@ authRouter.post("/signup", async (req, res) => {
       const token = await savedUser.getJWT();
   
       res.cookie("token", token, {
+        httpOnly: true,
+        secure: environment === "production", // Secure only in production
+        sameSite: "None",
         expires: new Date(Date.now() + 8 * 3600000),
       });
+
   
       res.json({ message: "User Added successfully!", data: savedUser });
     } catch (err) {
       res.status(400).send("ERROR : " + err.message);
     }
+    
   });
 
 
